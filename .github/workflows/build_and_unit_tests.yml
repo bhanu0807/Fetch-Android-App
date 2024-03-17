@@ -1,0 +1,27 @@
+name: Build and Unit Tests
+
+on: [pull_request, push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set Up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          # Only write to the cache for builds on the 'development' branch
+          cache-read-only: ${{ github.ref != 'refs/heads/development' }}
+
+      - name: Build Project
+        run: ./gradlew assemble --stacktrace
+
+      - name: Run Tests
+        run: ./gradlew test --stacktrace
