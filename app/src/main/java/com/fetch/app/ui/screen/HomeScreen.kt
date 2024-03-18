@@ -23,7 +23,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -54,7 +53,10 @@ fun HomeScreen(
             onRefresh = { viewModel.onRefresh() }
         )
 
-        is RewardsUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
+        is RewardsUiState.Loading -> LoadingScreen(
+            modifier = modifier.fillMaxSize()
+        )
+
         is RewardsUiState.Success -> RewardsListScreen(
             uiState.groupedRewards,
             onRefresh = { viewModel.onRefresh() },
