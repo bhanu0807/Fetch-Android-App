@@ -13,11 +13,14 @@ class NetworkRewardsRepository @Inject constructor(
 ) : RewardsRepository {
     override suspend fun getGroupedRewards(): Map<Int, List<Reward>> =
         fetchApiService.getRewards()
+            // Remove `null` and blank named rewards
             .filter { reward: Reward -> !reward.name.isNullOrBlank() }
+            // Sort first by `listId` and then by `name`
             .sortedWith(
                 compareBy(
                     { reward: Reward -> reward.listId },
                     { reward: Reward -> reward.name })
                 )
+            // Group rewards by `listId`
             .groupBy { reward: Reward -> reward.listId }
 }

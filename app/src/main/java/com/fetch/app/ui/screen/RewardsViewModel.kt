@@ -1,5 +1,6 @@
 package com.fetch.app.ui.screen
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -15,6 +16,8 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
+
+private const val TAG = "RewardsViewModel"
 
 sealed interface RewardsUiState {
     data object Loading : RewardsUiState
@@ -39,8 +42,10 @@ class RewardsViewModel @Inject constructor(
             rewardsUiState = try {
                 Success(rewardsRepository.getGroupedRewards())
             } catch (e: HttpException) {
+                Log.e(TAG, e.message())
                 Error(e)
             } catch (e: IOException) {
+                Log.e(TAG, e.message, e)
                 Error(e)
             }
         }
