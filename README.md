@@ -38,6 +38,20 @@ To build and test this Android application, you need the following:
 For more details on **System Requirements** and **Installation Process**, checkout [this link](https://developer.android.com/codelabs/basic-android-kotlin-compose-install-android-studio).
 
 
+## How to install (optional)
+
+There is an apk built from the latest code. You can use this to install and run the application.
+
+ - Make sure `adb` is available by running the following command
+      ```
+      ~/Library/Android/sdk/platform-tools/adb
+      ```
+ - If not, add it to the `$PATH` variable following [this link](https://stackoverflow.com/questions/10303639/adb-command-not-found)
+ - Install the apk by running the following command
+     ```
+     adb install -t dist/fetch-rewards.apk
+     ```
+
 ## How to run
 
 After setting up the necessary prerequisite, follow the below steps to run this application.
