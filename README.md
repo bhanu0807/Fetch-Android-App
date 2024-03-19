@@ -1,6 +1,6 @@
 # Fetch Rewards App
 
-A native Android app in Kotlin is implemented that performs the following tasks
+A native Android app implemented in Kotlin that performs the following tasks
 * retrieves the following Reward data from an [external API](https://fetch-hiring.s3.amazonaws.com/hiring.json).
   * _id_
   * _listId_
@@ -30,22 +30,13 @@ A native Android app in Kotlin is implemented that performs the following tasks
 
 ## Prerequisites
 
-To build and test this Android application, the following tools and environments are required:
+To build and test this Android application, you need the following:
 
-### Required
 - **Android Studio**: v2023.2.1 (Iguana) [Download](https://developer.android.com/studio)
 - **Physical Device** ([Setup](https://developer.android.com/studio/run/device)) or **Android Emulator** targetSdk: 34 ([Setup](https://developer.android.com/studio/run/managing-avds))
 
 For more details on **System Requirements** and **Installation Process**, checkout [this link](https://developer.android.com/codelabs/basic-android-kotlin-compose-install-android-studio).
 
-### Optional
-- **Git**
-- **JDK (Java Development Kit)**: v17
-- **Kotlin**: v1.9.22
-- **Android SDK (Software Development Kit)**:
-    - **Compile SDK Version**: 34
-    - **Minimum SDK Version (minSdk)**: 21
-    - **Target SDK Version (targetSdk)**: 34
 
 ## How to run
 
@@ -134,8 +125,8 @@ There are a total of three screens within the app's flow.
 ## App Flows
 
 ### Use Case 1 
-- The user opens the app with good internet connection and the server is also up
-- Based on the internet connection, the user might see the loading screen followed by the home screen
+- The user opens the app with good internet connection and the server is also up.
+- Based on the internet connection, the user might see the loading screen followed by the home screen.
 
 <p align="center">
   <img src="screenshots/loading-view.png" width="200" alt="Loading View">
@@ -163,7 +154,7 @@ There are a total of three screens within the app's flow.
 </p>
 
 ### Use Case 4
-- The user opens the app with no internet connection, or the server is down is the middle of fetching the data.
+- The user opens the app with no internet connection, or the server is down in the middle of fetching the data.
 - This will show the error screen with a retry button.
 
 <p align="center">
