@@ -2,30 +2,18 @@ package com.fetch.app.ui.screen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -33,8 +21,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fetch.app.R
@@ -47,22 +36,75 @@ fun HomeScreen(
     viewModel: RewardsViewModel = hiltViewModel(),
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
-    when (val uiState = viewModel.rewardsUiState) {
-        is RewardsUiState.Error -> ErrorScreen(
-            modifier = modifier.fillMaxSize(),
-            onRefresh = { viewModel.onRefresh() }
+    var searchText by remember { mutableStateOf(TextFieldValue("")) }
+    var sortAscending by remember { mutableStateOf(true) }
+    var searchById by remember { mutableStateOf(false) }
+    var filteredRewards by remember { mutableStateOf<Map<Int, List<Reward>>>(emptyMap()) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        // Search Bar
+        OutlinedTextField(
+            value = searchText,
+            onValueChange = { searchText = it },
+            label = { Text("Search by ID or Name") },
+            modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(onDone = { })
         )
 
-        is RewardsUiState.Loading -> LoadingScreen(
-            modifier = modifier.fillMaxSize()
-        )
+        Spacer(modifier = Modifier.height(8.dp))
 
-        is RewardsUiState.Success -> RewardsListScreen(
-            uiState.groupedRewards,
-            onRefresh = { viewModel.onRefresh() },
-            modifier = modifier.fillMaxSize(),
-            contentPadding = contentPadding
-        )
+        // Sorting Options
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Button(onClick = { sortAscending = !sortAscending }) {
+                Text(if (sortAscending) "Sort: Ascending" else "Sort: Descending")
+            }
+            Button(onClick = { searchById = !searchById }) {
+                Text(if (searchById) "Search by ID" else "Search by Name")
+            }
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Submit Button to Apply Filter
+        Button(
+            onClick = {
+                filteredRewards = viewModel.sortList(searchText.text, sortAscending, searchById)
+            },
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        ) {
+            Text("Submit")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Handle UI States
+        when (val uiState = viewModel.rewardsUiState) {
+            is RewardsUiState.Error -> ErrorScreen(
+                modifier = modifier.fillMaxSize(),
+                onRefresh = { viewModel.onRefresh() }
+            )
+
+            is RewardsUiState.Loading -> LoadingScreen(
+                modifier = modifier.fillMaxSize()
+            )
+
+            is RewardsUiState.Success -> RewardsListScreen(
+                groupedRewards = if (filteredRewards.isEmpty()) uiState.groupedRewards else filteredRewards,
+                onRefresh = { viewModel.onRefresh() },
+                modifier = modifier.fillMaxSize(),
+                contentPadding = contentPadding
+            )
+        }
     }
 }
 
@@ -116,10 +158,7 @@ fun RewardsListScreen(
                     RewardHeader(listId = listId)
                 }
                 items(rewards, key = Reward::id) { reward ->
-                    RewardItem(
-                        reward = reward,
-                        modifier = modifier,
-                    )
+                    RewardItem(reward = reward, modifier = modifier)
                 }
             }
         }
@@ -142,10 +181,7 @@ fun RewardsListScreen(
 }
 
 @Composable
-fun RewardHeader(
-    listId: Int,
-    modifier: Modifier = Modifier
-) {
+fun RewardHeader(listId: Int, modifier: Modifier = Modifier) {
     Text(
         text = "${stringResource(R.string.reward_list)} $listId",
         style = MaterialTheme.typography.titleLarge,
@@ -156,43 +192,56 @@ fun RewardHeader(
     )
 }
 
-
 @Composable
 fun RewardItem(reward: Reward, modifier: Modifier = Modifier) {
-    Row(
+    Card(
         modifier = modifier
-            .fillMaxHeight(),
-        horizontalArrangement = Arrangement.SpaceBetween
+            .fillMaxWidth()
+            .padding(8.dp),
+        elevation = CardDefaults.cardElevation(2.dp)
     ) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth(),
-            elevation = CardDefaults.cardElevation(2.dp)
-        ) {
-            Column(modifier = Modifier.padding(8.dp)) {
-                Text(
-                    buildAnnotatedString {
-                        withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
-                            append(stringResource(R.string.reward_id))
-                        }
-                        append("       ")
-                        append(" : ")
-                        append("${reward.id}")
-                    },
-                    Modifier.padding(2.dp)
-                )
-                Text(
-                    buildAnnotatedString {
-                        withStyle(SpanStyle(fontWeight = FontWeight.Medium)) {
-                            append(stringResource(R.string.reward_name))
-                        }
-                        append(" : ")
-                        append("${reward.name}")
-                    },
-                    Modifier.padding(2.dp)
-                )
-            }
+        Column(modifier = Modifier.padding(8.dp)) {
+            Text(
+                buildAnnotatedString {
+                    withStyle(style = SpanStyle(fontWeight = FontWeight.Medium)) {
+                        append("Reward ID: ")
+                    }
+                    append("${reward.id}")
+                },
+                Modifier.padding(2.dp)
+            )
+            Text(
+                buildAnnotatedString {
+                    withStyle(style = SpanStyle(fontWeight = FontWeight.Medium)) {
+                        append("Reward Name: ")
+                    }
+                    append(reward.name ?: "No Name")
+                },
+                Modifier.padding(2.dp)
+            )
         }
+    }
+}
+
+fun RewardsViewModel.sortList(query: String, ascending: Boolean, searchById: Boolean): Map<Int, List<Reward>> {
+    return if (rewardsUiState is RewardsUiState.Success) {
+        val rewards = (rewardsUiState as RewardsUiState.Success).groupedRewards.values.flatten()
+
+        val filteredList = when {
+            query.isEmpty() -> rewards // No filtering if query is empty
+            searchById -> rewards.filter { it.id.toString().contains(query) }
+            else -> rewards.filter { it.name?.contains(query, ignoreCase = true) == true }
+        }
+
+        val sortedList = if (ascending) {
+            filteredList.sortedWith(compareBy { if (searchById) it.id else it.name ?: "" })
+        } else {
+            filteredList.sortedWith(compareByDescending { if (searchById) it.id else it.name ?: "" })
+        }
+
+        sortedList.groupBy { it.listId }
+    } else {
+        emptyMap()
     }
 }
 
@@ -209,21 +258,5 @@ fun LoadingScreenPreview() {
 fun ErrorScreenPreview() {
     FetchTheme {
         ErrorScreen(onRefresh = {})
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun RewardsListScreenPreview() {
-    FetchTheme {
-        val mockData = mapOf(
-            Pair(
-                1, listOf(Reward(id = 1, listId = 1, name = "mock1"))
-            ),
-            Pair(
-                2, listOf(Reward(id = 2, listId = 1, name = "mock2"))
-            )
-        )
-        RewardsListScreen(mockData, contentPadding = PaddingValues(0.dp)) { }
     }
 }

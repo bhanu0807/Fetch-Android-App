@@ -31,25 +31,35 @@ class RewardsViewModel @Inject constructor(
 ) : ViewModel() {
 
     var rewardsUiState: RewardsUiState by mutableStateOf(Loading)
+        private set
+
+    private var originalRewards: List<Reward> = emptyList() // Stores full rewards list
+    private var _filteredRewards: List<Reward> = emptyList() // Stores filtered rewards
+    val filteredRewards: List<Reward> get() = _filteredRewards // Public getter
 
     init {
-        getRewards(rewardsRepository)
+        getRewards()
     }
 
-    private fun getRewards(rewardsRepository: RewardsRepository) {
+    private fun getRewards() {
         viewModelScope.launch {
             rewardsUiState = Loading
             rewardsUiState = try {
-                Success(rewardsRepository.getGroupedRewards())
-            } catch (e: HttpException) {
-                Log.e(TAG, e.message())
-                Error(e)
-            } catch (e: IOException) {
-                Log.e(TAG, e.message, e)
+                originalRewards = rewardsRepository.getGroupedRewards().values.flatten() // Convert to List
+                _filteredRewards = originalRewards // Initially, show all rewards
+                Success(rewardsRepository.getGroupedRewards()) // Update UI state
+            } catch (e: Exception) {
                 Error(e)
             }
         }
     }
 
-    fun onRefresh() = getRewards(rewardsRepository)
+    fun onRefresh() = getRewards()
+
+    fun sortList(query: String) {
+        _filteredRewards = originalRewards.filter { reward ->
+            reward.name?.contains(query, ignoreCase = true) ?: false
+        }
+        rewardsUiState = Success(_filteredRewards.groupBy { it.listId }) // Update UI state
+    }
 }

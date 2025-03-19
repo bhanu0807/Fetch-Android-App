@@ -32,7 +32,7 @@ A native Android app implemented in Kotlin that performs the following tasks
 
 To build and test this Android application, you need the following:
 
-- **Android Studio**: v2023.2.1 (Iguana) [Download](https://developer.android.com/studio)
+- **Android Studio**: v2023.2.1 (Igua   na) [Download](https://developer.android.com/studio)
 - **Physical Device** ([Setup](https://developer.android.com/studio/run/device)) or **Android Emulator** targetSdk: 34 ([Setup](https://developer.android.com/studio/run/managing-avds))
 
 For more details on **System Requirements** and **Installation Process**, checkout [this link](https://developer.android.com/codelabs/basic-android-kotlin-compose-install-android-studio).
