@@ -65,6 +65,8 @@ sdk.dir=/path/to/your/android/sdk
 ### Screenshots
 
 ![Screenshot 2025-03-19 235005](https://github.com/user-attachments/assets/1f8582eb-ed55-413a-a6a3-4eb3384c2fcc)
+
+
 ![Screenshot 2025-03-19 235024](https://github.com/user-attachments/assets/fe0b6499-3efe-4f8c-b55b-0d376e056a10)
 ![Screenshot 2025-03-19 235110](https://github.com/user-attachments/assets/d124795c-7d20-4c49-a9bc-f6f62358585e)
 ![Screenshot 2025-03-19 235138](https://github.com/user-attachments/assets/e79ab644-b803-47a4-8635-8a3cb77f5c0c)
