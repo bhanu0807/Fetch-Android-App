@@ -215,6 +215,7 @@ set -- \
         "$@"
 
 # Stop when "xargs" is not available.
+
 if ! command -v xargs >/dev/null 2>&1
 then
     die "xargs is not available"

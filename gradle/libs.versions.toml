@@ -21,6 +21,7 @@ mockitoCore = "5.11.0"
 mockitoKotlin = "5.2.1"
 retrofit2 = "2.9.0"
 
+
 [libraries]
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }

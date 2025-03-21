@@ -38,7 +38,7 @@ Ensure you have the following installed before setting up the project:
 ## Installation & Setup
 ### Clone the Repository
 ```sh
-git clone <your_github_repo_url>
+git clone https://github.com/bhanu0807/Reward-android-app.git
 cd fetch-rewards-app
 ```
 
@@ -83,4 +83,4 @@ sdk.dir=/path/to/your/android/sdk
 - If the build fails, try running `./gradlew clean` before rebuilding.
 
 ---
-GitHub Repository: [Fetch Rewards App](<your_repo_url>)
+GitHub Repository: [Fetch Rewards App](https://github.com/bhanu0807/Reward-android-app.git)
