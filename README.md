@@ -38,7 +38,7 @@ Ensure you have the following installed before setting up the project:
 ## Installation & Setup
 ### Clone the Repository
 ```sh
-git clone https://github.com/bhanu0807/Reward-android-app.git
+git clone https://github.com/bhanu0807/fetch-android-app.git
 cd fetch-rewards-app
 ```
 
@@ -64,12 +64,11 @@ sdk.dir=/path/to/your/android/sdk
 
 ### Screenshots
 
-![Screenshot 2025-03-19 235005](https://github.com/user-attachments/assets/1f8582eb-ed55-413a-a6a3-4eb3384c2fcc)
+![Screenshot 2025-03-19 235005](https://github.com/user-attachments/assets/d8c18dd8-37a1-4777-8c01-cd202786cdbe) ![Screenshot 2025-03-19 235024](https://github.com/user-attachments/assets/fc0b6cd7-49a5-47cb-a59d-648b85a18763) ![Screenshot 2025-03-19 235110](https://github.com/user-attachments/assets/b61cc477-f4a7-4e1e-a256-83d268ef1cd2) ![Screenshot 2025-03-19 235138](https://github.com/user-attachments/assets/7e976a89-e2f9-422b-9902-d10c331eb72a)
 
 
-![Screenshot 2025-03-19 235024](https://github.com/user-attachments/assets/fe0b6499-3efe-4f8c-b55b-0d376e056a10)
-![Screenshot 2025-03-19 235110](https://github.com/user-attachments/assets/d124795c-7d20-4c49-a9bc-f6f62358585e)
-![Screenshot 2025-03-19 235138](https://github.com/user-attachments/assets/e79ab644-b803-47a4-8635-8a3cb77f5c0c)
+
+
 
 
 ## Workflow
@@ -85,4 +84,4 @@ sdk.dir=/path/to/your/android/sdk
 - If the build fails, try running `./gradlew clean` before rebuilding.
 
 ---
-GitHub Repository: [Fetch Rewards App](https://github.com/bhanu0807/Reward-android-app.git)
+GitHub Repository: [Fetch Rewards App](https://github.com/bhanu0807/fetch-android-app.git)
